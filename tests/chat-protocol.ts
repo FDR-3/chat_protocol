@@ -3,17 +3,10 @@ import { Program, BN } from "@coral-xyz/anchor"
 import { Chat } from "../target/types/chat"
 import { assert } from "chai"
 import { utf8 } from "@coral-xyz/anchor/dist/cjs/utils/bytes"
-import * as fs from 'fs';
-import bs58 from 'bs58';
-import { Keypair, PublicKey } from '@solana/web3.js'; // Import the Keypair class
-/*import {
-    TOKEN_PROGRAM_ID,
-    ASSOCIATED_TOKEN_PROGRAM_ID,
-    getAssociatedTokenAddress,
-    createMint,
-    mintTo,
-    createAssociatedTokenAccount
-} from "@solana/spl-token";*/
+import * as fs from 'fs'
+import bs58 from 'bs58'
+import { PublicKey, Keypair, Transaction } from '@solana/web3.js' // Import the Keypair class
+import { Token, ASSOCIATED_TOKEN_PROGRAM_ID, TOKEN_PROGRAM_ID } from "@solana/spl-token"
 
 describe("Chat_Protocol", () => 
 {
@@ -22,6 +15,8 @@ describe("Chat_Protocol", () =>
 
   const program = anchor.workspace.Chat as Program<Chat>
   const publicKey = anchor.AnchorProvider.local().wallet.publicKey
+  var usdcMint = undefined
+  const usdcTokenDecimalAmount = 6
 
   const textWith444Characters = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum feli"
   const textWith144Characters = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis"
@@ -53,37 +48,28 @@ describe("Chat_Protocol", () =>
 
   let successorWallet = anchor.web3.Keypair.generate()
 
-  /*it("Creates And Mints USDC For Fees", async () => 
+  //Load the keypair from config file
+  const keypairPath = '/home/fdr1/.config/solana/id.json';
+  const keypairData = JSON.parse(fs.readFileSync(keypairPath, 'utf8'));
+  const testingWalletKeypair = Keypair.fromSecretKey(Uint8Array.from(keypairData))
+
+  it("Creates Token Mint For Fees", async () => 
   {
-    // Load the keypair from the file
-    const keypairPath = '/home/fdr1/.config/solana/id.json';
-    const keypairData = JSON.parse(fs.readFileSync(keypairPath, 'utf8'));
-    const keypair = Keypair.fromSecretKey(Uint8Array.from(keypairData));
-
-    // 1. Create a new USDC Mint for testing
-    usdcMint = await createMint(
-        program.provider.connection,
-        keypair, // Payer for the mint creation
-        program.provider.publicKey, // Mint authority (who can mint tokens)
-        null, // Freeze authority (optional)
-        6, // Decimals for USDC
-        keypair,
-        undefined,
-        TOKEN_PROGRAM_ID // SPL Token program ID
-    )
-    console.log("Created USDC Mint:", usdcMint.toBase58())
-
-    // 2. Create associated token account if it doesn't exist
-    await createAssociatedTokenAccount(
+    //Create a new USDC Mint for testing
+    usdcMint = await Token.createMint
+    (
       program.provider.connection,
-      keypair, // Payer for the ATA creation (user's wallet)
-      usdcMint, // Mint for the ATA
-      program.provider.publicKey, // Owner of the ATA (user's wallet)
-      undefined,
-      TOKEN_PROGRAM_ID,
-      ASSOCIATED_TOKEN_PROGRAM_ID
+      testingWalletKeypair, //Payer for the mint creation
+      program.provider.publicKey, // Mint authority (who can mint tokens)
+      null, //Freeze authority (optional)
+      6, //Decimals for USDC
+      TOKEN_PROGRAM_ID //SPL Token program ID
     )
-  })*/
+
+    const walletATA = await deriveWalletATA(program.provider.publicKey, usdcMint.publicKey)
+    await createATAForWallet(testingWalletKeypair, usdcMint.publicKey, walletATA)
+    await mintUSDCToWallet(usdcMint.publicKey, walletATA)
+  })
 
   it("Initializes Chat Protocol CEO Account", async () => 
   {
@@ -91,24 +77,15 @@ describe("Chat_Protocol", () =>
     //console.log(keypair.secretKey) //prints out U8Int array to put in .config/solana/id.json file if you want to put in your own wallet.
     //Will need to delete target folder, run "cargo clean" cmd, "solana air drop 100 sol <pulicAddressString>" to wallet to have enough to deploy, then build and deploy
 
-    await program.methods.initializeChatProtocolCeoAccount().rpc()
+    await program.methods.initializeChatProtocolAdminAccounts().rpc()
     
     var ceoAccount = await program.account.chatProtocolCeo.fetch(getChatProtocolCEOAccountPDA())
     assert(ceoAccount.address.toBase58() == program.provider.publicKey.toBase58())
   })
-program.provider.
+
   it("Passes on the Chat Protocol CEO Account", async () => 
   {
-    let token_airdrop = await program.provider.connection.requestAirdrop(successorWallet.publicKey, 
-      1000 * 10002240)
-  
-    const latestBlockHash = await program.provider.connection.getLatestBlockhash()
-    await program.provider.connection.confirmTransaction
-    ({
-      blockhash: latestBlockHash.blockhash,
-      lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
-      signature: token_airdrop,
-    })
+    await airDropSol(successorWallet.publicKey)
 
     await program.methods.passOnChatProtocolCeo(successorWallet.publicKey, ).rpc()
     
@@ -127,6 +104,22 @@ program.provider.
     assert(ceoAccount.address.toBase58() == program.provider.publicKey.toBase58())
   })
 
+  it("Initializes Quailty of Life Accounts", async () => 
+  {
+    await program.methods.initializeQualityOfLifeAccounts().rpc()
+  })
+
+  it("Adds a Fee Token Entry Then Removes It", async () => 
+  {
+    await program.methods.addFeeTokenEntry(usdcMint.publicKey, usdcTokenDecimalAmount).rpc()
+    await program.methods.removeFeeTokenEntry(usdcMint.publicKey).rpc()
+  })
+
+  it("Adds a Fee Token Entry", async () => 
+  {
+    await program.methods.addFeeTokenEntry(usdcMint.publicKey, usdcTokenDecimalAmount).rpc()
+  })
+
   it("Initializes Chat Protocol", async () => 
   {
     await program.methods.initializeChatProtocol().rpc()
@@ -139,17 +132,17 @@ program.provider.
 
   it("Updates User Name", async () => 
   {
-    await program.methods.updateUserName(userName, ).rpc()
+    await program.methods.updateUserName(usdcMint.publicKey, userName).rpc()
   })
 
   it("Set Use Custom Name Flag False", async () => 
   {
-    await program.methods.setUseCustomNameFlag(false, ).rpc()
+    await program.methods.setUseCustomNameFlag(usdcMint.publicKey, false).rpc()
   })
 
   it("Set Use Custom Name Flag True", async () => 
   {
-    await program.methods.setUseCustomNameFlag(true, ).rpc()
+    await program.methods.setUseCustomNameFlag(usdcMint.publicKey, true).rpc()
   })
 
   it("Creates Poll & Poll Option, Edits Poll & Poll Option, Votes On Poll Option, And Then Toggles The Poll Option and Poll Active Flags", async () => 
@@ -175,7 +168,7 @@ program.provider.
     assert(pollOption.pollOptionName == "edited test poll option")
 
     //Vote poll option
-    await program.methods.votePollOption(new anchor.BN(0), 0, new anchor.BN(100)).rpc()
+    await program.methods.votePollOption(new anchor.BN(0), 0, usdcMint.publicKey, new anchor.BN(100)).rpc()
 
     pollOption = await program.account.pollOption.fetch(getPollOptionPDA(0, 0))
     assert(pollOption.upVoteScore.eq(new anchor.BN(100)))
@@ -236,6 +229,7 @@ program.provider.
     await program.methods.commentSectionVote
     (
       m4aCommentSectionNamePrefix, commentSectionName,
+      usdcMint.publicKey, 
       new anchor.BN(voteAmount)
     ).rpc()
 
@@ -252,6 +246,7 @@ program.provider.
       await program.methods.commentSectionVote
       (
         m4aCommentSectionNamePrefix, commentSectionName,
+        usdcMint.publicKey, 
         new anchor.BN(negativeVoteAmount)
       ).rpc()
 
@@ -275,6 +270,7 @@ program.provider.
       await program.methods.postM4AComment
       (
         m4aCommentSectionNamePrefix, commentSectionName,
+        usdcMint.publicKey, 
         comment
       ).rpc()
 
@@ -293,6 +289,7 @@ program.provider.
       (
         m4aCommentSectionNamePrefix, commentSectionName,
         newM4AComment[0].account.chatAccountPostCountIndex,
+        usdcMint.publicKey,
         editedText
       ).rpc()
 
@@ -308,6 +305,7 @@ program.provider.
         m4aCommentSectionNamePrefix, commentSectionName,
         newM4AComment[0].account.postOwnerAddress,
         newM4AComment[0].account.chatAccountPostCountIndex,
+        usdcMint.publicKey,
         new anchor.BN(voteAmount)
       ).rpc()
 
@@ -325,6 +323,7 @@ program.provider.
           m4aCommentSectionNamePrefix, commentSectionName,
           newM4AComment[0].account.postOwnerAddress,
           newM4AComment[0].account.chatAccountPostCountIndex,
+          usdcMint.publicKey, 
           new anchor.BN(negativeVoteAmount)
         ).rpc()
 
@@ -456,7 +455,8 @@ program.provider.
       await program.methods.deleteM4AComment
       (
         m4aCommentSectionNamePrefix, commentSectionName,
-        newM4AComment[0].account.chatAccountPostCountIndex
+        newM4AComment[0].account.chatAccountPostCountIndex,
+        usdcMint.publicKey
       ).rpc()
 
       m4aComments = await program.account.m4AComment.all()
@@ -482,6 +482,7 @@ program.provider.
         m4aCommentSectionNamePrefix, commentSectionName,
         m4aComments[0].account.postOwnerAddress,
         m4aComments[0].account.chatAccountPostCountIndex,
+        usdcMint.publicKey,
         reply
       ).rpc()
 
@@ -502,6 +503,7 @@ program.provider.
       (
         m4aCommentSectionNamePrefix, commentSectionName,
         chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+        usdcMint.publicKey,
         editedText
       ).rpc()
 
@@ -517,6 +519,7 @@ program.provider.
         m4aCommentSectionNamePrefix, commentSectionName,
         m4aReplies[0].account.postOwnerAddress,
         chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+        usdcMint.publicKey,
         new anchor.BN(voteAmount)
       ).rpc()
 
@@ -534,6 +537,7 @@ program.provider.
           m4aCommentSectionNamePrefix, commentSectionName,
           m4aReplies[0].account.postOwnerAddress,
           chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+          usdcMint.publicKey,
           new anchor.BN(negativeVoteAmount)
         ).rpc()
 
@@ -666,7 +670,8 @@ program.provider.
       await program.methods.deleteM4AReply
       (
         m4aCommentSectionNamePrefix, commentSectionName,
-        chatAccount.commentAndReplyCount.sub(new anchor.BN(1))
+        chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+        usdcMint.publicKey,
       ).rpc()
 
       m4aReplies = await program.account.m4AReply.all()
@@ -692,6 +697,7 @@ program.provider.
         m4aCommentSectionNamePrefix, commentSectionName,
         m4aReplies[0].account.postOwnerAddress,
         m4aReplies[0].account.chatAccountPostCountIndex,
+        usdcMint.publicKey,
         reply
       ).rpc()
 
@@ -712,6 +718,7 @@ program.provider.
       (
         m4aCommentSectionNamePrefix, commentSectionName,
         chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+        usdcMint.publicKey,
         editedText
       ).rpc()
 
@@ -727,6 +734,7 @@ program.provider.
         m4aCommentSectionNamePrefix, commentSectionName,
         newM4ALv3Reply.postOwnerAddress,
         chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+        usdcMint.publicKey,
         new anchor.BN(voteAmount)
       ).rpc()
 
@@ -744,6 +752,7 @@ program.provider.
           m4aCommentSectionNamePrefix, commentSectionName,
           newM4ALv3Reply.postOwnerAddress,
           chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+          usdcMint.publicKey,
           new anchor.BN(negativeVoteAmount)
         ).rpc()
 
@@ -875,7 +884,8 @@ program.provider.
       await program.methods.deleteM4ALv3Reply
       (
         m4aCommentSectionNamePrefix, commentSectionName,
-        chatAccount.commentAndReplyCount.sub(new anchor.BN(1))
+        chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+        usdcMint.publicKey
       ).rpc()
 
       m4aLv3Replies = await program.account.m4ALv3Reply.all()
@@ -901,6 +911,7 @@ program.provider.
         m4aCommentSectionNamePrefix, commentSectionName,
         m4aLv3Replies[0].account.postOwnerAddress,
         m4aLv3Replies[0].account.chatAccountPostCountIndex,
+        usdcMint.publicKey,
         reply
       ).rpc()
 
@@ -921,6 +932,7 @@ program.provider.
       (
         m4aCommentSectionNamePrefix, commentSectionName,
         chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+        usdcMint.publicKey,
         editedText
       ).rpc()
 
@@ -935,6 +947,7 @@ program.provider.
         m4aCommentSectionNamePrefix, commentSectionName,
         newM4ALv4Reply.postOwnerAddress,
         chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+        usdcMint.publicKey,
         new anchor.BN(voteAmount)).rpc()
 
       m4aLv4Replies = await program.account.m4ALv4Reply.all()
@@ -951,6 +964,7 @@ program.provider.
           m4aCommentSectionNamePrefix, commentSectionName,
           newM4ALv4Reply.postOwnerAddress,
           chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+          usdcMint.publicKey,
           new anchor.BN(negativeVoteAmount)
         ).rpc()
 
@@ -1082,7 +1096,8 @@ program.provider.
       await program.methods.deleteM4ALv4Reply
       (
         m4aCommentSectionNamePrefix, commentSectionName,
-        chatAccount.commentAndReplyCount.sub(new anchor.BN(1))
+        chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+        usdcMint.publicKey
       ).rpc()
 
       m4aLv4Replies = await program.account.m4ALv4Reply.all()
@@ -1099,6 +1114,7 @@ program.provider.
         m4aCommentSectionNamePrefix, commentSectionName,
         deletedM4AReply[0].account.postOwnerAddress,
         chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+        usdcMint.publicKey,
         replyToLv4Reply
       ).rpc()
 
@@ -1128,6 +1144,7 @@ program.provider.
     await program.methods.commentSectionVote
     (
       pliCommentSectionNamePrefix, commentSectionName,
+      usdcMint.publicKey,
       new anchor.BN(voteAmount)
     ).rpc()
 
@@ -1144,6 +1161,7 @@ program.provider.
       await program.methods.commentSectionVote
       (
         pliCommentSectionNamePrefix, commentSectionName,
+        usdcMint.publicKey,
         new anchor.BN(negativeVoteAmount)
       ).rpc()
 
@@ -1167,6 +1185,7 @@ program.provider.
       await program.methods.postPliComment
       (
         pliCommentSectionNamePrefix, commentSectionName,
+        usdcMint.publicKey,
         comment
       ).rpc()
 
@@ -1185,6 +1204,7 @@ program.provider.
       (
         pliCommentSectionNamePrefix, commentSectionName,
         newPLIComment[0].account.chatAccountPostCountIndex,
+        usdcMint.publicKey,
         editedText
       ).rpc()
 
@@ -1200,6 +1220,7 @@ program.provider.
         pliCommentSectionNamePrefix, commentSectionName,
         newPLIComment[0].account.postOwnerAddress,
         newPLIComment[0].account.chatAccountPostCountIndex,
+        usdcMint.publicKey,
         new anchor.BN(voteAmount)
       ).rpc()
 
@@ -1217,6 +1238,7 @@ program.provider.
           pliCommentSectionNamePrefix, commentSectionName,
           newPLIComment[0].account.postOwnerAddress,
           newPLIComment[0].account.chatAccountPostCountIndex,
+          usdcMint.publicKey,
           new anchor.BN(negativeVoteAmount)
         ).rpc()
       
@@ -1348,7 +1370,8 @@ program.provider.
       await program.methods.deletePliComment
       (
         pliCommentSectionNamePrefix, commentSectionName,
-        newPLIComment[0].account.chatAccountPostCountIndex
+        newPLIComment[0].account.chatAccountPostCountIndex,
+        usdcMint.publicKey,
       ).rpc()
 
       pliComments = await program.account.pliComment.all()
@@ -1374,6 +1397,7 @@ program.provider.
         pliCommentSectionNamePrefix, commentSectionName,
         pliComments[0].account.postOwnerAddress,
         pliComments[0].account.chatAccountPostCountIndex,
+        usdcMint.publicKey,
         reply
       ).rpc()
 
@@ -1394,6 +1418,7 @@ program.provider.
       (
         pliCommentSectionNamePrefix, commentSectionName,
         chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+        usdcMint.publicKey,
         editedText
       ).rpc()
 
@@ -1409,6 +1434,7 @@ program.provider.
         pliCommentSectionNamePrefix, commentSectionName,
         pliReplies[0].account.postOwnerAddress,
         chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+        usdcMint.publicKey,
         new anchor.BN(voteAmount)
       ).rpc()
 
@@ -1426,6 +1452,7 @@ program.provider.
           pliCommentSectionNamePrefix, commentSectionName,
           pliReplies[0].account.postOwnerAddress,
           chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+          usdcMint.publicKey,
           new anchor.BN(negativeVoteAmount)
         ).rpc()
       
@@ -1557,7 +1584,8 @@ program.provider.
       await program.methods.deletePliReply
       (
         pliCommentSectionNamePrefix, commentSectionName,
-        chatAccount.commentAndReplyCount.sub(new anchor.BN(1))
+        chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+        usdcMint.publicKey
       ).rpc()
 
       pliReplies = await program.account.pliReply.all()
@@ -1583,6 +1611,7 @@ program.provider.
         pliCommentSectionNamePrefix, commentSectionName,
         pliReplies[0].account.postOwnerAddress,
         pliReplies[0].account.chatAccountPostCountIndex,
+        usdcMint.publicKey,
         reply
       ).rpc()
 
@@ -1603,6 +1632,7 @@ program.provider.
       (
         pliCommentSectionNamePrefix, commentSectionName,
         chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+        usdcMint.publicKey,
         editedText
       ).rpc()
 
@@ -1618,6 +1648,7 @@ program.provider.
         pliCommentSectionNamePrefix, commentSectionName,
         newPLILv3Reply.postOwnerAddress,
         chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+        usdcMint.publicKey,
         new anchor.BN(voteAmount)
       ).rpc()
 
@@ -1635,6 +1666,7 @@ program.provider.
           pliCommentSectionNamePrefix, commentSectionName,
           newPLILv3Reply.postOwnerAddress,
           chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+          usdcMint.publicKey,
           new anchor.BN(negativeVoteAmount)
         ).rpc()
 
@@ -1766,7 +1798,8 @@ program.provider.
       await program.methods.deletePliLv3Reply
       (
         pliCommentSectionNamePrefix, commentSectionName,
-        chatAccount.commentAndReplyCount.sub(new anchor.BN(1))
+        chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+        usdcMint.publicKey,
       ).rpc()
 
       pliLv3Replies = await program.account.pliLv3Reply.all()
@@ -1792,6 +1825,7 @@ program.provider.
         pliCommentSectionNamePrefix, commentSectionName,
         pliLv3Replies[0].account.postOwnerAddress,
         pliLv3Replies[0].account.chatAccountPostCountIndex,
+        usdcMint.publicKey,
         reply
       ).rpc()
 
@@ -1812,6 +1846,7 @@ program.provider.
       (
         pliCommentSectionNamePrefix, commentSectionName,
         chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+        usdcMint.publicKey,
         editedText
       ).rpc()
 
@@ -1827,6 +1862,7 @@ program.provider.
         pliCommentSectionNamePrefix, commentSectionName,
         newPLILv4Reply.postOwnerAddress,
         chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+        usdcMint.publicKey,
         new anchor.BN(voteAmount)
       ).rpc()
 
@@ -1844,6 +1880,7 @@ program.provider.
           pliCommentSectionNamePrefix, commentSectionName,
           newPLILv4Reply.postOwnerAddress,
           chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+          usdcMint.publicKey,
           new anchor.BN(negativeVoteAmount)
         ).rpc()
 
@@ -1975,7 +2012,8 @@ program.provider.
       await program.methods.deletePliLv4Reply
       (
         pliCommentSectionNamePrefix, commentSectionName,
-        chatAccount.commentAndReplyCount.sub(new anchor.BN(1))
+        chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+        usdcMint.publicKey
       ).rpc()
 
       pliLv4Replies = await program.account.pliLv4Reply.all()
@@ -1992,6 +2030,7 @@ program.provider.
         pliCommentSectionNamePrefix, commentSectionName,
         deletedPLIReply[0].account.postOwnerAddress,
         chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+        usdcMint.publicKey,
         replyToLv4Reply
       ).rpc()
 
@@ -2021,6 +2060,7 @@ program.provider.
     await program.methods.commentSectionVote
     (
       aboutCommentSectionNamePrefix, commentSectionName,
+      usdcMint.publicKey,
       new anchor.BN(voteAmount)
     ).rpc()
 
@@ -2037,6 +2077,7 @@ program.provider.
       await program.methods.commentSectionVote
       (
         aboutCommentSectionNamePrefix, commentSectionName,
+        usdcMint.publicKey,
         new anchor.BN(negativeVoteAmount)
       ).rpc()
 
@@ -2060,6 +2101,7 @@ program.provider.
       await program.methods.postAboutComment
       (
         aboutCommentSectionNamePrefix, commentSectionName,
+        usdcMint.publicKey,
         comment
       ).rpc()
 
@@ -2078,6 +2120,7 @@ program.provider.
       (
         aboutCommentSectionNamePrefix, commentSectionName,
         newAboutComment[0].account.chatAccountPostCountIndex,
+        usdcMint.publicKey,
         editedText
       ).rpc()
 
@@ -2093,6 +2136,7 @@ program.provider.
         aboutCommentSectionNamePrefix, commentSectionName,
         newAboutComment[0].account.postOwnerAddress,
         newAboutComment[0].account.chatAccountPostCountIndex,
+        usdcMint.publicKey,
         new anchor.BN(voteAmount)
       ).rpc()
 
@@ -2110,6 +2154,7 @@ program.provider.
           aboutCommentSectionNamePrefix, commentSectionName,
           newAboutComment[0].account.postOwnerAddress,
           newAboutComment[0].account.chatAccountPostCountIndex,
+          usdcMint.publicKey,
           new anchor.BN(negativeVoteAmount)
         ).rpc()
       
@@ -2241,7 +2286,8 @@ program.provider.
       await program.methods.deleteAboutComment
       (
         aboutCommentSectionNamePrefix, commentSectionName,
-        newAboutComment[0].account.chatAccountPostCountIndex
+        newAboutComment[0].account.chatAccountPostCountIndex,
+        usdcMint.publicKey
       ).rpc()
 
       aboutComments = await program.account.aboutComment.all()
@@ -2267,6 +2313,7 @@ program.provider.
         aboutCommentSectionNamePrefix, commentSectionName,
         aboutComments[0].account.postOwnerAddress,
         aboutComments[0].account.chatAccountPostCountIndex,
+        usdcMint.publicKey,
         reply
       ).rpc()
 
@@ -2287,6 +2334,7 @@ program.provider.
       (
         aboutCommentSectionNamePrefix, commentSectionName,
         chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+        usdcMint.publicKey,
         editedText
       ).rpc()
 
@@ -2302,6 +2350,7 @@ program.provider.
         aboutCommentSectionNamePrefix, commentSectionName,
         aboutReplies[0].account.postOwnerAddress,
         chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+        usdcMint.publicKey,
         new anchor.BN(voteAmount)
       ).rpc()
 
@@ -2319,6 +2368,7 @@ program.provider.
           aboutCommentSectionNamePrefix, commentSectionName,
           aboutReplies[0].account.postOwnerAddress,
           chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+          usdcMint.publicKey,
           new anchor.BN(negativeVoteAmount)
         ).rpc()
       
@@ -2450,7 +2500,8 @@ program.provider.
       await program.methods.deleteAboutReply
       (
         aboutCommentSectionNamePrefix, commentSectionName,
-        chatAccount.commentAndReplyCount.sub(new anchor.BN(1))
+        chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+        usdcMint.publicKey
       ).rpc()
 
       aboutReplies = await program.account.aboutReply.all()
@@ -2476,6 +2527,7 @@ program.provider.
         aboutCommentSectionNamePrefix, commentSectionName,
         aboutReplies[0].account.postOwnerAddress,
         aboutReplies[0].account.chatAccountPostCountIndex,
+        usdcMint.publicKey,
         reply
       ).rpc()
 
@@ -2496,6 +2548,7 @@ program.provider.
       (
         aboutCommentSectionNamePrefix, commentSectionName,
         chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+        usdcMint.publicKey,
         editedText
       ).rpc()
 
@@ -2510,6 +2563,7 @@ program.provider.
         aboutCommentSectionNamePrefix, commentSectionName,
         newAboutLv3Reply.postOwnerAddress,
         chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+        usdcMint.publicKey,
         new anchor.BN(voteAmount)).rpc()
 
       aboutLv3Replies = await program.account.aboutLv3Reply.all()
@@ -2526,6 +2580,7 @@ program.provider.
           aboutCommentSectionNamePrefix, commentSectionName,
           newAboutLv3Reply.postOwnerAddress,
           chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+          usdcMint.publicKey,
           new anchor.BN(negativeVoteAmount)
         ).rpc()
 
@@ -2657,7 +2712,8 @@ program.provider.
       await program.methods.deleteAboutLv3Reply
       (
         aboutCommentSectionNamePrefix, commentSectionName,
-        chatAccount.commentAndReplyCount.sub(new anchor.BN(1))
+        chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+        usdcMint.publicKey
       ).rpc()
 
       aboutLv3Replies = await program.account.aboutLv3Reply.all()
@@ -2683,6 +2739,7 @@ program.provider.
         aboutCommentSectionNamePrefix, commentSectionName,
         aboutLv3Replies[0].account.postOwnerAddress,
         aboutLv3Replies[0].account.chatAccountPostCountIndex,
+        usdcMint.publicKey,
         reply
       ).rpc()
 
@@ -2703,6 +2760,7 @@ program.provider.
       (
         aboutCommentSectionNamePrefix, commentSectionName,
         chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+        usdcMint.publicKey,
         editedText
       ).rpc()
 
@@ -2718,6 +2776,7 @@ program.provider.
         aboutCommentSectionNamePrefix, commentSectionName,
         newAboutLv4Reply.postOwnerAddress,
         chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+        usdcMint.publicKey,
         new anchor.BN(voteAmount)
       ).rpc()
 
@@ -2735,6 +2794,7 @@ program.provider.
           aboutCommentSectionNamePrefix, commentSectionName,
           newAboutLv4Reply.postOwnerAddress,
           chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+          usdcMint.publicKey,
           new anchor.BN(negativeVoteAmount)
         ).rpc()
 
@@ -2866,7 +2926,8 @@ program.provider.
       await program.methods.deleteAboutLv4Reply
       (
         aboutCommentSectionNamePrefix, commentSectionName,
-        chatAccount.commentAndReplyCount.sub(new anchor.BN(1))
+        chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+        usdcMint.publicKey
       ).rpc()
 
       aboutLv4Replies = await program.account.aboutLv4Reply.all()
@@ -2883,6 +2944,7 @@ program.provider.
         aboutCommentSectionNamePrefix, commentSectionName,
         deletedAboutReply[0].account.postOwnerAddress,
         chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+        usdcMint.publicKey,
         replyToLv4Reply
       ).rpc()
 
@@ -2912,6 +2974,7 @@ program.provider.
     await program.methods.commentSectionVote
     (
       loCommentSectionNamePrefix, commentSectionName,
+      usdcMint.publicKey,
       new anchor.BN(voteAmount)
     ).rpc()
 
@@ -2928,6 +2991,7 @@ program.provider.
       await program.methods.commentSectionVote
       (
         loCommentSectionNamePrefix, commentSectionName,
+        usdcMint.publicKey,
         new anchor.BN(negativeVoteAmount)
       ).rpc()
 
@@ -2951,6 +3015,7 @@ program.provider.
       await program.methods.postLoComment
       (
         loCommentSectionNamePrefix, commentSectionName,
+        usdcMint.publicKey,
         comment
       ).rpc()
 
@@ -2969,6 +3034,7 @@ program.provider.
       (
         loCommentSectionNamePrefix, commentSectionName,
         newLoComment[0].account.chatAccountPostCountIndex,
+        usdcMint.publicKey,
         editedText
       ).rpc()
 
@@ -2984,6 +3050,7 @@ program.provider.
         loCommentSectionNamePrefix, commentSectionName,
         newLoComment[0].account.postOwnerAddress,
         newLoComment[0].account.chatAccountPostCountIndex,
+        usdcMint.publicKey,
         new anchor.BN(voteAmount)
       ).rpc()
 
@@ -3001,6 +3068,7 @@ program.provider.
           loCommentSectionNamePrefix, commentSectionName,
           newLoComment[0].account.postOwnerAddress,
           newLoComment[0].account.chatAccountPostCountIndex,
+          usdcMint.publicKey,
           new anchor.BN(negativeVoteAmount)
         ).rpc()
       
@@ -3132,7 +3200,8 @@ program.provider.
       await program.methods.deleteLoComment
       (
         loCommentSectionNamePrefix, commentSectionName,
-        newLoComment[0].account.chatAccountPostCountIndex
+        newLoComment[0].account.chatAccountPostCountIndex,
+        usdcMint.publicKey
       ).rpc()
 
       loComments = await program.account.loComment.all()
@@ -3158,6 +3227,7 @@ program.provider.
         loCommentSectionNamePrefix, commentSectionName,
         loComments[0].account.postOwnerAddress,
         loComments[0].account.chatAccountPostCountIndex,
+        usdcMint.publicKey,
         reply
       ).rpc()
 
@@ -3178,6 +3248,7 @@ program.provider.
       (
         loCommentSectionNamePrefix, commentSectionName,
         chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+        usdcMint.publicKey,
         editedText
       ).rpc()
 
@@ -3193,6 +3264,7 @@ program.provider.
         loCommentSectionNamePrefix, commentSectionName,
         loReplies[0].account.postOwnerAddress,
         chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+        usdcMint.publicKey,
         new anchor.BN(voteAmount)
       ).rpc()
 
@@ -3210,6 +3282,7 @@ program.provider.
           loCommentSectionNamePrefix, commentSectionName,
           loReplies[0].account.postOwnerAddress,
           chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+          usdcMint.publicKey,
           new anchor.BN(negativeVoteAmount)
         ).rpc()
       
@@ -3341,7 +3414,8 @@ program.provider.
       await program.methods.deleteLoReply
       (
         loCommentSectionNamePrefix, commentSectionName,
-        chatAccount.commentAndReplyCount.sub(new anchor.BN(1))
+        chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+        usdcMint.publicKey
       ).rpc()
 
       loReplies = await program.account.loReply.all()
@@ -3367,6 +3441,7 @@ program.provider.
         loCommentSectionNamePrefix, commentSectionName,
         loReplies[0].account.postOwnerAddress,
         loReplies[0].account.chatAccountPostCountIndex,
+        usdcMint.publicKey,
         reply
       ).rpc()
 
@@ -3387,6 +3462,7 @@ program.provider.
       (
         loCommentSectionNamePrefix, commentSectionName,
         chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+        usdcMint.publicKey,
         editedText
       ).rpc()
 
@@ -3401,6 +3477,7 @@ program.provider.
         loCommentSectionNamePrefix, commentSectionName,
         newLoLv3Reply.postOwnerAddress,
         chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+        usdcMint.publicKey,
         new anchor.BN(voteAmount)).rpc()
 
       loLv3Replies = await program.account.loLv3Reply.all()
@@ -3417,6 +3494,7 @@ program.provider.
           loCommentSectionNamePrefix, commentSectionName,
           newLoLv3Reply.postOwnerAddress,
           chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+          usdcMint.publicKey,
           new anchor.BN(negativeVoteAmount)
         ).rpc()
 
@@ -3548,7 +3626,8 @@ program.provider.
       await program.methods.deleteLoLv3Reply
       (
         loCommentSectionNamePrefix, commentSectionName,
-        chatAccount.commentAndReplyCount.sub(new anchor.BN(1))
+        chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+        usdcMint.publicKey
       ).rpc()
 
       loLv3Replies = await program.account.loLv3Reply.all()
@@ -3574,6 +3653,7 @@ program.provider.
         loCommentSectionNamePrefix, commentSectionName,
         loLv3Replies[0].account.postOwnerAddress,
         loLv3Replies[0].account.chatAccountPostCountIndex,
+        usdcMint.publicKey,
         reply
       ).rpc()
 
@@ -3594,6 +3674,7 @@ program.provider.
       (
         loCommentSectionNamePrefix, commentSectionName,
         chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+        usdcMint.publicKey,
         editedText
       ).rpc()
 
@@ -3609,6 +3690,7 @@ program.provider.
         loCommentSectionNamePrefix, commentSectionName,
         newLoLv4Reply.postOwnerAddress,
         chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+        usdcMint.publicKey,
         new anchor.BN(voteAmount)
       ).rpc()
 
@@ -3626,6 +3708,7 @@ program.provider.
           loCommentSectionNamePrefix, commentSectionName,
           newLoLv4Reply.postOwnerAddress,
           chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+          usdcMint.publicKey,
           new anchor.BN(negativeVoteAmount)
         ).rpc()
 
@@ -3757,7 +3840,8 @@ program.provider.
       await program.methods.deleteLoLv4Reply
       (
         loCommentSectionNamePrefix, commentSectionName,
-        chatAccount.commentAndReplyCount.sub(new anchor.BN(1))
+        chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+        usdcMint.publicKey
       ).rpc()
 
       loLv4Replies = await program.account.loLv4Reply.all()
@@ -3774,6 +3858,7 @@ program.provider.
         loCommentSectionNamePrefix, commentSectionName,
         deletedLoReply[0].account.postOwnerAddress,
         chatAccount.commentAndReplyCount.sub(new anchor.BN(1)),
+        usdcMint.publicKey,
         replyToLv4Reply
       ).rpc()
 
@@ -3799,6 +3884,83 @@ program.provider.
     await sleep(5000) // Sleep for 5 seconds
     console.log('End sleep: ', counter)
     counter += 1
+  }
+
+  async function airDropSol(walletPublicKey: PublicKey)
+  {
+    let token_airdrop = await program.provider.connection.requestAirdrop(walletPublicKey, 
+    100 * 1000000000) //1 billion lamports equals 1 SOL
+
+    const latestBlockHash = await program.provider.connection.getLatestBlockhash()
+    await program.provider.connection.confirmTransaction
+    ({
+      blockhash: latestBlockHash.blockhash,
+      lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
+      signature: token_airdrop
+    })
+  }
+
+  async function deriveWalletATA(walletPublicKey: PublicKey, tokenMintAddress: PublicKey)
+  {
+    return await Token.getAssociatedTokenAddress
+    (
+      ASSOCIATED_TOKEN_PROGRAM_ID,
+      TOKEN_PROGRAM_ID,
+      tokenMintAddress,
+      walletPublicKey
+    )
+  }
+
+  async function createATAForWallet(walletKeyPair: Keypair, tokenMintAddress: PublicKey, walletATA: PublicKey)
+  {
+    //1. Add createATA instruction to transaction
+    const transaction = new Transaction().add
+    (
+      Token.createAssociatedTokenAccountInstruction
+      (
+        ASSOCIATED_TOKEN_PROGRAM_ID,
+        TOKEN_PROGRAM_ID,
+        tokenMintAddress,
+        walletATA,
+        walletKeyPair.publicKey,
+        walletKeyPair.publicKey
+      )
+    )
+
+    //2. Fetch the latest blockhash and set it on the transaction.
+    const latestBlockhash = await program.provider.connection.getLatestBlockhash()
+    transaction.recentBlockhash = latestBlockhash.blockhash
+    transaction.feePayer = walletKeyPair.publicKey
+
+    //3. Sign the transaction
+    transaction.sign(walletKeyPair);
+    //const signedTransaction = await program.provider.wallet.signTransaction(transaction)
+
+    //4. Send the signed transaction to the network.
+    //We get the signature back, which can be used to track the transaction.
+    const tx = await program.provider.connection.sendRawTransaction(transaction.serialize())
+
+    await program.provider.connection.confirmTransaction(tx, 'processed')
+  }
+
+  async function mintUSDCToWallet(tokenMintAddress: PublicKey, walletATA: PublicKey)
+  {
+    //1. Add createMintTo instruction to transaction
+    const transaction = new Transaction().add
+    (
+      Token.createMintToInstruction
+      (
+        TOKEN_PROGRAM_ID,
+        tokenMintAddress,
+        walletATA,
+        program.provider.publicKey,
+        [testingWalletKeypair],
+        10000000000//$10,000.00
+      )
+    )
+
+    // 3. Send the transaction
+    await program.provider.sendAndConfirm(transaction);
   }
 
   function getChatProtocolCEOAccountPDA()

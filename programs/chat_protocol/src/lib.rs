@@ -6,7 +6,8 @@ use solana_security_txt::security_txt;
 declare_id!("TfoKjohya9Ak5N1WrCoKCqaEbCq2EhucHWprbxqrYmV");
 
 #[cfg(not(feature = "no-entrypoint"))] // Ensure it's not included when compiled as a library
-security_txt! {
+security_txt!
+{
     name: "M4A Protocol",
     project_url: "https://m4a.io",
     contacts: "email fdr3@m4a.io",
@@ -16,9 +17,11 @@ security_txt! {
 }
 
 const INITIAL_CEO_ADDRESS: Pubkey = pubkey!("Fdqu1muWocA5ms8VmTrUxRxxmSattrmpNraQ7RpPvzZg");
+//const INITIAL_CEO_ADDRESS: Pubkey = pubkey!("DSLn1ofuSWLbakQWhPUenSBHegwkBBTUwx8ZY4Wfoxm");
 
-// Define the constant public key for the USDC fee recipient
-pub const INITIAL_TREASURER_ADDRESS: Pubkey = pubkey!("9BRgCdmwyP5wGVTvKAUDjSwucpqGncurVa35DjaWqSsC"); 
+//Define the constant public key for the USDC fee recipient
+const INITIAL_TREASURER_ADDRESS: Pubkey = pubkey!("9BRgCdmwyP5wGVTvKAUDjSwucpqGncurVa35DjaWqSsC");
+//const INITIAL_TREASURER_ADDRESS: Pubkey = pubkey!("DSLn1ofuSWLbakQWhPUenSBHegwkBBTUwx8ZY4Wfoxm");
 
 const FEE_1CENT: f64 = 0.01;
 const FEE_3CENTS: f64 = 0.03;
@@ -448,8 +451,8 @@ pub mod chat
 
         //Call the helper function to transfer the fee
         apply_fee(
-            accounts.user_fee_ata.to_account_info(),
-            accounts.treasurer_fee_ata.to_account_info(),
+            accounts.user_ata.to_account_info(),
+            accounts.treasurer_ata.to_account_info(),
             accounts.signer.to_account_info(),
             accounts.token_program.to_account_info(),
             treasurer,
@@ -485,8 +488,8 @@ pub mod chat
 
         //Call the helper function to transfer the fee
         apply_fee(
-            accounts.user_fee_ata.to_account_info(),
-            accounts.treasurer_fee_ata.to_account_info(),
+            accounts.user_ata.to_account_info(),
+            accounts.treasurer_ata.to_account_info(),
             accounts.signer.to_account_info(),
             accounts.token_program.to_account_info(),
             treasurer,
@@ -516,8 +519,8 @@ pub mod chat
 
         //Call the helper function to transfer the fee
         apply_fee(
-            accounts.user_fee_ata.to_account_info(),
-            accounts.treasurer_fee_ata.to_account_info(),
+            accounts.user_ata.to_account_info(),
+            accounts.treasurer_ata.to_account_info(),
             accounts.signer.to_account_info(),
             accounts.token_program.to_account_info(),
             treasurer,
@@ -573,8 +576,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -636,8 +639,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -699,8 +702,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -762,8 +765,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -825,8 +828,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -883,8 +886,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -946,8 +949,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -1009,8 +1012,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -1072,8 +1075,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -1135,8 +1138,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -1193,8 +1196,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -1256,8 +1259,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -1319,8 +1322,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -1382,8 +1385,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -1445,8 +1448,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -1503,8 +1506,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -1566,8 +1569,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -1629,8 +1632,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -1692,8 +1695,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -1755,8 +1758,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -1814,8 +1817,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -1872,8 +1875,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -1931,8 +1934,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -1990,8 +1993,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -2049,8 +2052,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -2108,8 +2111,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -2167,8 +2170,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -2226,8 +2229,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -2285,8 +2288,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -2344,8 +2347,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -2403,8 +2406,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -2462,8 +2465,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -2521,8 +2524,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -2580,8 +2583,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -2639,8 +2642,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -2698,8 +2701,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -2747,8 +2750,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -2796,8 +2799,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -2845,8 +2848,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -2894,8 +2897,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -2943,8 +2946,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -2992,8 +2995,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -3041,8 +3044,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -3090,8 +3093,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -3139,8 +3142,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -3188,8 +3191,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -3237,8 +3240,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -3286,8 +3289,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -3335,8 +3338,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -3384,8 +3387,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -3433,8 +3436,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -3482,8 +3485,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -3602,8 +3605,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -3613,7 +3616,7 @@ pub mod chat
 
             //Call the helper function to transfer the fee to the post owner
             send_turd_of_tree(
-                accounts.user_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
                 accounts.post_owner_usdc_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
@@ -3629,8 +3632,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -3749,8 +3752,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -3760,7 +3763,7 @@ pub mod chat
 
             //Call the helper function to transfer the fee to the post owner
             send_turd_of_tree(
-                accounts.user_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
                 accounts.post_owner_usdc_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
@@ -3776,8 +3779,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -3896,8 +3899,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -3907,7 +3910,7 @@ pub mod chat
 
             //Call the helper function to transfer the fee to the post owner
             send_turd_of_tree(
-                accounts.user_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
                 accounts.post_owner_usdc_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
@@ -3923,8 +3926,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -4043,8 +4046,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -4054,7 +4057,7 @@ pub mod chat
 
             //Call the helper function to transfer the fee to the post owner
             send_turd_of_tree(
-                accounts.user_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
                 accounts.post_owner_usdc_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
@@ -4070,8 +4073,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -4190,8 +4193,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -4201,7 +4204,7 @@ pub mod chat
 
             //Call the helper function to transfer the fee to the post owner
             send_turd_of_tree(
-                accounts.user_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
                 accounts.post_owner_usdc_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
@@ -4217,8 +4220,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -4337,8 +4340,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -4348,7 +4351,7 @@ pub mod chat
 
             //Call the helper function to transfer the fee to the post owner
             send_turd_of_tree(
-                accounts.user_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
                 accounts.post_owner_usdc_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
@@ -4364,8 +4367,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -4484,8 +4487,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -4495,7 +4498,7 @@ pub mod chat
 
             //Call the helper function to transfer the fee to the post owner
             send_turd_of_tree(
-                accounts.user_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
                 accounts.post_owner_usdc_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
@@ -4511,8 +4514,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -4631,8 +4634,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -4642,7 +4645,7 @@ pub mod chat
 
             //Call the helper function to transfer the fee to the post owner
             send_turd_of_tree(
-                accounts.user_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
                 accounts.post_owner_usdc_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
@@ -4658,8 +4661,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -4778,8 +4781,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -4789,7 +4792,7 @@ pub mod chat
 
             //Call the helper function to transfer the fee to the post owner
             send_turd_of_tree(
-                accounts.user_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
                 accounts.post_owner_usdc_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
@@ -4805,8 +4808,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -4925,8 +4928,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -4936,7 +4939,7 @@ pub mod chat
 
             //Call the helper function to transfer the fee to the post owner
             send_turd_of_tree(
-                accounts.user_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
                 accounts.post_owner_usdc_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
@@ -4952,8 +4955,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -5072,8 +5075,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -5083,7 +5086,7 @@ pub mod chat
 
             //Call the helper function to transfer the fee to the post owner
             send_turd_of_tree(
-                accounts.user_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
                 accounts.post_owner_usdc_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
@@ -5099,8 +5102,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -5219,8 +5222,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -5230,7 +5233,7 @@ pub mod chat
 
             //Call the helper function to transfer the fee to the post owner
             send_turd_of_tree(
-                accounts.user_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
                 accounts.post_owner_usdc_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
@@ -5246,8 +5249,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -5366,8 +5369,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -5377,7 +5380,7 @@ pub mod chat
 
             //Call the helper function to transfer the fee to the post owner
             send_turd_of_tree(
-                accounts.user_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
                 accounts.post_owner_usdc_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
@@ -5393,8 +5396,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -5513,8 +5516,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -5524,7 +5527,7 @@ pub mod chat
 
             //Call the helper function to transfer the fee to the post owner
             send_turd_of_tree(
-                accounts.user_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
                 accounts.post_owner_usdc_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
@@ -5540,8 +5543,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -5660,8 +5663,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -5671,7 +5674,7 @@ pub mod chat
 
             //Call the helper function to transfer the fee to the post owner
             send_turd_of_tree(
-                accounts.user_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
                 accounts.post_owner_usdc_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
@@ -5687,8 +5690,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -5807,8 +5810,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -5818,7 +5821,7 @@ pub mod chat
 
             //Call the helper function to transfer the fee to the post owner
             send_turd_of_tree(
-                accounts.user_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
                 accounts.post_owner_usdc_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
@@ -5834,8 +5837,8 @@ pub mod chat
 
             //Call the helper function to transfer the fee
             apply_fee(
-                accounts.user_fee_ata.to_account_info(),
-                accounts.treasurer_fee_ata.to_account_info(),
+                accounts.user_ata.to_account_info(),
+                accounts.treasurer_ata.to_account_info(),
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
@@ -8783,8 +8786,8 @@ pub mod chat
 
         //Call the helper function to transfer the fee
         apply_fee(
-            accounts.user_fee_ata.to_account_info(),
-            accounts.treasurer_fee_ata.to_account_info(),
+            accounts.user_ata.to_account_info(),
+            accounts.treasurer_ata.to_account_info(),
             accounts.signer.to_account_info(),
             accounts.token_program.to_account_info(),
             treasurer,
@@ -9141,14 +9144,14 @@ pub struct UpdateUserName<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -9189,14 +9192,14 @@ pub struct SetUseCustomNameFlag<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -9313,14 +9316,14 @@ pub struct CommentSectionVote<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -9391,14 +9394,14 @@ pub struct PostM4AComment<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Box<Account<'info, TokenAccount>>,
+    pub treasurer_ata: Box<Account<'info, TokenAccount>>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -9483,14 +9486,14 @@ pub struct ReplyToM4AComment<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -9575,14 +9578,14 @@ pub struct ReplyToM4AReply<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -9667,14 +9670,14 @@ pub struct ReplyToM4ALv3Reply<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -9759,14 +9762,14 @@ pub struct ReplyToM4ALv4Reply<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -9837,14 +9840,14 @@ pub struct PostPLIComment<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Box<Account<'info, TokenAccount>>,
+    pub treasurer_ata: Box<Account<'info, TokenAccount>>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -9929,14 +9932,14 @@ pub struct ReplyToPLIComment<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -10021,14 +10024,14 @@ pub struct ReplyToPLIReply<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -10113,14 +10116,14 @@ pub struct ReplyToPLILv3Reply<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -10205,14 +10208,14 @@ pub struct ReplyToPLILv4Reply<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -10283,14 +10286,14 @@ pub struct PostAboutComment<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Box<Account<'info, TokenAccount>>,
+    pub treasurer_ata: Box<Account<'info, TokenAccount>>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -10375,14 +10378,14 @@ pub struct ReplyToAboutComment<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -10467,14 +10470,14 @@ pub struct ReplyToAboutReply<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -10559,14 +10562,14 @@ pub struct ReplyToAboutLv3Reply<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -10651,14 +10654,14 @@ pub struct ReplyToAboutLv4Reply<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -10729,14 +10732,14 @@ pub struct PostLOComment<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Box<Account<'info, TokenAccount>>,
+    pub treasurer_ata: Box<Account<'info, TokenAccount>>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -10821,14 +10824,14 @@ pub struct ReplyToLOComment<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -10913,14 +10916,14 @@ pub struct ReplyToLOReply<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -11005,14 +11008,14 @@ pub struct ReplyToLOLv3Reply<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -11097,14 +11100,14 @@ pub struct ReplyToLOLv4Reply<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -11167,14 +11170,14 @@ pub struct EditM4AComment<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -11237,14 +11240,14 @@ pub struct EditM4AReply<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -11307,14 +11310,14 @@ pub struct EditM4ALv3Reply<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -11377,14 +11380,14 @@ pub struct EditM4ALv4Reply<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -11447,14 +11450,14 @@ pub struct EditPLIComment<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -11517,14 +11520,14 @@ pub struct EditPLIReply<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -11587,14 +11590,14 @@ pub struct EditPLILv3Reply<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -11657,14 +11660,14 @@ pub struct EditPLILv4Reply<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -11727,14 +11730,14 @@ pub struct EditAboutComment<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -11797,14 +11800,14 @@ pub struct EditAboutReply<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -11867,14 +11870,14 @@ pub struct EditAboutLv3Reply<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -11937,14 +11940,14 @@ pub struct EditAboutLv4Reply<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -12007,14 +12010,14 @@ pub struct EditLOComment<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -12077,14 +12080,14 @@ pub struct EditLOReply<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -12147,14 +12150,14 @@ pub struct EditLOLv3Reply<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -12217,14 +12220,14 @@ pub struct EditLOLv4Reply<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -12287,14 +12290,14 @@ pub struct DeleteM4AComment<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -12357,14 +12360,14 @@ pub struct DeleteM4AReply<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -12427,14 +12430,14 @@ pub struct DeleteM4ALv3Reply<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -12497,14 +12500,14 @@ pub struct DeleteM4ALv4Reply<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -12567,14 +12570,14 @@ pub struct DeletePLIComment<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -12637,14 +12640,14 @@ pub struct DeletePLIReply<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -12707,14 +12710,14 @@ pub struct DeletePLILv3Reply<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -12777,14 +12780,14 @@ pub struct DeletePLILv4Reply<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -12847,14 +12850,14 @@ pub struct DeleteAboutComment<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -12917,14 +12920,14 @@ pub struct DeleteAboutReply<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -12987,14 +12990,14 @@ pub struct DeleteAboutLv3Reply<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -13057,14 +13060,14 @@ pub struct DeleteAboutLv4Reply<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -13127,14 +13130,14 @@ pub struct DeleteLOComment<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -13197,14 +13200,14 @@ pub struct DeleteLOReply<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -13267,14 +13270,14 @@ pub struct DeleteLOLv3Reply<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -13337,14 +13340,14 @@ pub struct DeleteLOLv4Reply<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -13425,14 +13428,14 @@ pub struct M4ACommentVote<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Box<Account<'info, TokenAccount>>,
+    pub treasurer_ata: Box<Account<'info, TokenAccount>>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -13523,14 +13526,14 @@ pub struct M4AReplyVote<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Box<Account<'info, TokenAccount>>,
+    pub treasurer_ata: Box<Account<'info, TokenAccount>>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -13618,14 +13621,14 @@ pub struct M4ALv3ReplyVote<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Box<Account<'info, TokenAccount>>,
+    pub treasurer_ata: Box<Account<'info, TokenAccount>>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -13713,14 +13716,14 @@ pub struct M4ALv4ReplyVote<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Box<Account<'info, TokenAccount>>,
+    pub treasurer_ata: Box<Account<'info, TokenAccount>>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -13808,14 +13811,14 @@ pub struct PLICommentVote<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Box<Account<'info, TokenAccount>>,
+    pub treasurer_ata: Box<Account<'info, TokenAccount>>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -13903,14 +13906,14 @@ pub struct PLIReplyVote<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Box<Account<'info, TokenAccount>>,
+    pub treasurer_ata: Box<Account<'info, TokenAccount>>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -13998,14 +14001,14 @@ pub struct PLILv3ReplyVote<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Box<Account<'info, TokenAccount>>,
+    pub treasurer_ata: Box<Account<'info, TokenAccount>>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -14093,14 +14096,14 @@ pub struct PLILv4ReplyVote<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Box<Account<'info, TokenAccount>>,
+    pub treasurer_ata: Box<Account<'info, TokenAccount>>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -14188,14 +14191,14 @@ pub struct AboutCommentVote<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Box<Account<'info, TokenAccount>>,
+    pub treasurer_ata: Box<Account<'info, TokenAccount>>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -14283,14 +14286,14 @@ pub struct AboutReplyVote<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Box<Account<'info, TokenAccount>>,
+    pub treasurer_ata: Box<Account<'info, TokenAccount>>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -14378,14 +14381,14 @@ pub struct AboutLv3ReplyVote<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Box<Account<'info, TokenAccount>>,
+    pub treasurer_ata: Box<Account<'info, TokenAccount>>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -14473,14 +14476,14 @@ pub struct AboutLv4ReplyVote<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Box<Account<'info, TokenAccount>>,
+    pub treasurer_ata: Box<Account<'info, TokenAccount>>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -14568,14 +14571,14 @@ pub struct LOCommentVote<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Box<Account<'info, TokenAccount>>,
+    pub treasurer_ata: Box<Account<'info, TokenAccount>>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -14663,14 +14666,14 @@ pub struct LOReplyVote<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Box<Account<'info, TokenAccount>>,
+    pub treasurer_ata: Box<Account<'info, TokenAccount>>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -14758,14 +14761,14 @@ pub struct LOLv3ReplyVote<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Box<Account<'info, TokenAccount>>,
+    pub treasurer_ata: Box<Account<'info, TokenAccount>>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -14853,14 +14856,14 @@ pub struct LOLv4ReplyVote<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Box<Account<'info, TokenAccount>>,
+    pub treasurer_ata: Box<Account<'info, TokenAccount>>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
@@ -19177,14 +19180,14 @@ pub struct VotePollOption<'info>
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = signer
     )]
-    pub user_fee_ata: Account<'info, TokenAccount>,
+    pub user_ata: Account<'info, TokenAccount>,
 
     #[account(
         mut,
         associated_token::mint = fee_token_entry.token_mint_address,
         associated_token::authority = treasurer.address
     )]
-    pub treasurer_fee_ata: Account<'info, TokenAccount>,
+    pub treasurer_ata: Account<'info, TokenAccount>,
 
     #[account(
         seeds = [b"feeTokenEntry".as_ref(),
