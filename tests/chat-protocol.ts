@@ -1,8 +1,8 @@
 import * as anchor from "@coral-xyz/anchor"
-import { Program, BN } from "@coral-xyz/anchor"
-import { Chat } from "../target/types/chat"
+import { Program } from "@coral-xyz/anchor"
+import type { Chat } from "../target/types/chat.ts"
 import { assert } from "chai"
-import { utf8 } from "@coral-xyz/anchor/dist/cjs/utils/bytes"
+import { utf8 } from "@coral-xyz/anchor/dist/cjs/utils/bytes/index.js"
 import * as fs from 'fs'
 import bs58 from 'bs58'
 import { PublicKey, Keypair, Transaction } from '@solana/web3.js' // Import the Keypair class
@@ -49,7 +49,7 @@ describe("Chat_Protocol", () =>
   let successorWallet = anchor.web3.Keypair.generate()
 
   //Load the keypair from config file
-  const keypairPath = '/home/fdr1/.config/solana/id.json';
+  const keypairPath = '/home/xavier/.config/solana/id.json';
   const keypairData = JSON.parse(fs.readFileSync(keypairPath, 'utf8'));
   const testingWalletKeypair = Keypair.fromSecretKey(Uint8Array.from(keypairData))
 
@@ -75,7 +75,6 @@ describe("Chat_Protocol", () =>
   {
     //const keypair = Keypair.fromSecretKey(bs58.decode("Private Key String")); 
     //console.log(keypair.secretKey) //prints out U8Int array to put in .config/solana/id.json file if you want to put in your own wallet.
-    //Will need to delete target folder, run "cargo clean" cmd, "solana air drop 100 sol <pulicAddressString>" to wallet to have enough to deploy, then build and deploy
 
     await program.methods.initializeChatProtocolAdminAccounts().rpc()
     
