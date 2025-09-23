@@ -5,12 +5,12 @@ import { assert } from "chai"
 import { utf8 } from "@coral-xyz/anchor/dist/cjs/utils/bytes/index.js"
 import * as fs from 'fs'
 import bs58 from 'bs58'
-import { PublicKey, Keypair, Transaction } from '@solana/web3.js' // Import the Keypair class
+import { PublicKey, Keypair, Transaction } from '@solana/web3.js'
 import { Token, ASSOCIATED_TOKEN_PROGRAM_ID, TOKEN_PROGRAM_ID } from "@solana/spl-token"
 
 describe("Chat_Protocol", () => 
 {
-  // Configure the client to use the local cluster.
+  //Configure the client to use the local cluster.
   anchor.setProvider(anchor.AnchorProvider.local())
 
   const program = anchor.workspace.Chat as Program<Chat>
@@ -24,6 +24,7 @@ describe("Chat_Protocol", () =>
   const textWith28Characters = "Lorem ipsum dolor sit amet,."
   const textWith27Characters = "Lorem ipsum dolor sit amet,"
   const textWith26Characters = "Lorem ipsum dolor sit amet"
+  const notCEOErrorMsg = "Only the CEO can call this function"
 
   //const m4aCommentSectionNamePrefix = "M4A_" + textWith28Characters //Seed String Can't be more than 32 characters
   const m4aCommentSectionNamePrefix = "M4A"
@@ -86,7 +87,7 @@ describe("Chat_Protocol", () =>
   {
     await airDropSol(successorWallet.publicKey)
 
-    await program.methods.passOnChatProtocolCeo(successorWallet.publicKey, ).rpc()
+    await program.methods.passOnChatProtocolCeo(successorWallet.publicKey).rpc()
     
     var ceoAccount = await program.account.chatProtocolCeo.fetch(getChatProtocolCEOAccountPDA())
     assert(ceoAccount.address.toBase58() == successorWallet.publicKey.toBase58())
@@ -94,13 +95,32 @@ describe("Chat_Protocol", () =>
   
   it("Passes back the Chat Protocol CEO Account", async () => 
   {
-    await program.methods.passOnChatProtocolCeo(program.provider.publicKey, ).
+    await program.methods.passOnChatProtocolCeo(program.provider.publicKey).
     accounts({signer: successorWallet.publicKey})
     .signers([successorWallet])
     .rpc()
     
     var ceoAccount = await program.account.chatProtocolCeo.fetch(getChatProtocolCEOAccountPDA())
     assert(ceoAccount.address.toBase58() == program.provider.publicKey.toBase58())
+  })
+
+  it("Verifies That Only CEO Can Pass On Account", async () => 
+  {
+    var errorMessage = ""
+
+    try
+    {
+      await program.methods.passOnChatProtocolCeo(program.provider.publicKey).
+      accounts({signer: successorWallet.publicKey})
+      .signers([successorWallet])
+      .rpc()
+    }
+    catch(error)
+    {
+      errorMessage = error.error.errorMessage
+    }
+
+    assert(errorMessage == notCEOErrorMsg)
   })
 
   it("Initializes Quailty of Life Accounts", async () => 

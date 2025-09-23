@@ -5,14 +5,14 @@ use solana_security_txt::security_txt;
 
 declare_id!("TfoKjohya9Ak5N1WrCoKCqaEbCq2EhucHWprbxqrYmV");
 
-#[cfg(not(feature = "no-entrypoint"))] // Ensure it's not included when compiled as a library
+#[cfg(not(feature = "no-entrypoint"))] //Ensure it's not included when compiled as a library
 security_txt!
 {
-    name: "M4A Protocol",
+    name: "Chat Protocol",
     project_url: "https://m4a.io",
     contacts: "email fdr3@m4a.io",
     preferred_languages: "en",
-    source_code: "https://github.com/FDR-3?tab=repositories",
+    source_code: "https://github.com/FDR-3/chat_protocol",
     policy: "If you find a bug, email me and say something please D:"
 }
 
@@ -8797,20 +8797,6 @@ pub mod chat
 
         Ok(())
     }
-
-    pub fn clock_in_dead_mans_break(ctx: Context<ClockInDeadMansBreak>) -> Result<()> 
-    {
-        let ceo = &mut ctx.accounts.ceo;
-        //Only the CEO can call this function
-        require_keys_eq!(ctx.accounts.signer.key(), ceo.address.key(), AuthorizationError::NotCEO);
-
-        let dead_mans_break = &mut ctx.accounts.dead_mans_break;
-        dead_mans_break.unix_clock_in_time_stamp = Clock::get()?.unix_timestamp as u64;
-
-        msg!("Dead Mans Break Refreshed");
-
-        Ok(())
-    }
 }   
 
 //Derived Accounts
@@ -8958,34 +8944,6 @@ pub struct InitializeQualityOfLifeAccounts<'info>
         bump, 
         space = size_of::<PollStats>() + 8)]
     pub poll_stats: Account<'info, PollStats>,
-
-    #[account(
-        init, 
-        payer = signer,
-        seeds = [b"deadMansBreak".as_ref()],
-        bump,
-        space = size_of::<DeadMansBreak>() + 8)]
-    pub dead_mans_break_counter: Account<'info, DeadMansBreak>,
-
-    #[account(mut)]
-    pub signer: Signer<'info>,
-    pub system_program: Program<'info, System>
-}
-
-#[derive(Accounts)]
-pub struct ClockInDeadMansBreak<'info> 
-{
-    #[account(
-        mut,
-        seeds = [b"chatProtocolCEO".as_ref()],
-        bump)]
-    pub ceo: Account<'info, ChatProtocolCEO>,
-
-    #[account(
-        mut,
-        seeds = [b"deadMansBreak".as_ref()],
-        bump)]
-    pub dead_mans_break: Account<'info, DeadMansBreak>,
 
     #[account(mut)]
     pub signer: Signer<'info>,
@@ -19220,12 +19178,6 @@ pub struct FeeTokenEntry
 {
     pub token_mint_address: Pubkey,
     pub decimal_amount: u8
-}
-
-#[account]
-pub struct DeadMansBreak
-{
-    pub unix_clock_in_time_stamp: u64
 }
 
 #[account]
