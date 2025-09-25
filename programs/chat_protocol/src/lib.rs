@@ -115,7 +115,7 @@ fn apply_fee<'info>(
     let cpi_accounts = token::Transfer {
         from: from_account,
         to: to_account,
-        authority: signer,
+        authority: signer
     };
     let cpi_program = token_program;
     let cpi_ctx = CpiContext::new(cpi_program, cpi_accounts);
@@ -144,7 +144,7 @@ fn send_turd_of_tree<'info>(
     let cpi_accounts = token::Transfer {
         from: from_account,
         to: to_account,
-        authority: signer,
+        authority: signer
     };
     let cpi_program = token_program;
     let cpi_ctx = CpiContext::new(cpi_program, cpi_accounts);
