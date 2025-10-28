@@ -16,12 +16,18 @@ security_txt!
     policy: "If you find a bug, email me and say something please D:"
 }
 
+#[cfg(feature = "dev")] 
 const INITIAL_CEO_ADDRESS: Pubkey = pubkey!("Fdqu1muWocA5ms8VmTrUxRxxmSattrmpNraQ7RpPvzZg");
-//const INITIAL_CEO_ADDRESS: Pubkey = pubkey!("DSLn1ofuSWLbakQWhPUenSBHegwkBBTUwx8ZY4Wfoxm");
 
-//Define the constant public key for the USDC fee recipient
+#[cfg(feature = "local")] 
+const INITIAL_CEO_ADDRESS: Pubkey = pubkey!("DSLn1ofuSWLbakQWhPUenSBHegwkBBTUwx8ZY4Wfoxm");
+
+//Define the initial public key treasury fee recipient
+#[cfg(feature = "dev")] 
 const INITIAL_TREASURER_ADDRESS: Pubkey = pubkey!("9BRgCdmwyP5wGVTvKAUDjSwucpqGncurVa35DjaWqSsC");
-//const INITIAL_TREASURER_ADDRESS: Pubkey = pubkey!("DSLn1ofuSWLbakQWhPUenSBHegwkBBTUwx8ZY4Wfoxm");
+
+#[cfg(feature = "local")] 
+const INITIAL_TREASURER_ADDRESS: Pubkey = pubkey!("DSLn1ofuSWLbakQWhPUenSBHegwkBBTUwx8ZY4Wfoxm");
 
 const FEE_1CENT: f64 = 0.01;
 const FEE_3CENTS: f64 = 0.03;

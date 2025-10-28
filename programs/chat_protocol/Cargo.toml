@@ -10,6 +10,8 @@ name = "chat_protocol"
 
 [features]
 default = []
+dev = []
+local = []
 cpi = ["no-entrypoint"]
 no-entrypoint = []
 no-idl = []
