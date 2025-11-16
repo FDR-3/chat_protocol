@@ -3898,7 +3898,9 @@ describe("Chat_Protocol", () =>
 
   const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
   var counter = 0
-  async function sleepFunction() {
+
+  async function sleepFunction()
+  {
     console.log('Start sleep: ', counter)
     await sleep(5000) // Sleep for 5 seconds
     console.log('End sleep: ', counter)
