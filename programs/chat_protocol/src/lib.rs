@@ -133,7 +133,7 @@ fn apply_fee<'info>(
     //Transfer fee to Treasurer Wallet
     token::transfer(cpi_ctx, fixed_pointed_notation_amount)?;
 
-    msg!("Successfully transferred ${:.2} as fee to: {}", (amount/100) as f32, treasurer.address);
+    msg!("Successfully transferred ${:.2} as fee to: {}", amount as f64 / 100.0, treasurer.address);
 
     Ok(())
 }
@@ -163,7 +163,7 @@ fn send_turd_of_tree<'info>(
     //Transfer fee to Post Owner Wallet
     token::transfer(cpi_ctx, fixed_pointed_notation_amount)?;
 
-    msg!("Successfully transferred ${:.2} as fee to: {}", (amount/100) as f32, post_owner_address.key());
+    msg!("Successfully transferred ${:.2} as fee to: {}", amount as f64 / 100.0, post_owner_address.key());
 
     Ok(())
 }
