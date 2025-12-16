@@ -29,10 +29,10 @@ const INITIAL_TREASURER_ADDRESS: Pubkey = pubkey!("9BRgCdmwyP5wGVTvKAUDjSwucpqGn
 #[cfg(feature = "local")] 
 const INITIAL_TREASURER_ADDRESS: Pubkey = pubkey!("DSLn1ofuSWLbakQWhPUenSBHegwkBBTUwx8ZY4Wfoxm");
 
-const FEE_1CENT: f64 = 0.01;
-const FEE_3CENTS: f64 = 0.03;
-const FEE_4CENTS: f64 = 0.04;
-const FEE_DOLLAR_TREE: f64 = 1.03;
+const FEE_1CENT: u64 = 1;
+const FEE_3CENTS: u64 = 3;
+const FEE_4CENTS: u64 = 4;
+const FEE_DOLLAR_TREE: u64 = 103;
 
 //Chat Accounts need atleast 119 extra bytes of space to pass with full load
 const CHAT_ACCOUNT_EXTRA_SIZE: usize = 119;
@@ -108,14 +108,14 @@ pub enum InvalidLengthError
     MSGTooLong,
 } 
 
-// Helper function to handle the USDC fee transfer
+//Helper function to handle the Stable Coin fee transfer
 fn apply_fee<'info>(
     from_account: AccountInfo<'info>,
     to_account: AccountInfo<'info>,
     signer: AccountInfo<'info>,
     token_program: AccountInfo<'info>,
     treasurer: Account<ChatProtocolTreasurer>,
-    amount: f64,
+    amount: u64,
     decimal_amount: u8
 ) -> Result<()> {
     let cpi_accounts = token::Transfer {
@@ -127,24 +127,25 @@ fn apply_fee<'info>(
     let cpi_ctx = CpiContext::new(cpi_program, cpi_accounts);
 
     let base_int :u64 = 10;
-    let conversion_number = base_int.pow(decimal_amount as u32) as f64;
-    let fixed_pointed_notation_amount = (amount * conversion_number) as u64;
+    let conversion_number = base_int.pow(decimal_amount as u32 - 2); //Convert fixed point cents to native token decimal amount
+    let fixed_pointed_notation_amount = amount * conversion_number;
 
     //Transfer fee to Treasurer Wallet
     token::transfer(cpi_ctx, fixed_pointed_notation_amount)?;
 
-    msg!("Successfully transferred ${:.2} as fee to: {}", amount,  treasurer.address);
+    msg!("Successfully transferred ${:.2} as fee to: {}", (amount/100) as f32, treasurer.address);
 
     Ok(())
 }
 
+//Helper function to handle the Stable Coin fee transfer to user receiveing up votes
 fn send_turd_of_tree<'info>(
     from_account: AccountInfo<'info>,
     to_account: AccountInfo<'info>,
     signer: AccountInfo<'info>,
     token_program: AccountInfo<'info>,
     post_owner_address: Pubkey,
-    amount: f64,
+    amount: u64,
     decimal_amount: u8
 ) -> Result<()> {
     let cpi_accounts = token::Transfer {
@@ -156,13 +157,13 @@ fn send_turd_of_tree<'info>(
     let cpi_ctx = CpiContext::new(cpi_program, cpi_accounts);
 
     let base_int :u64 = 10;
-    let conversion_number = base_int.pow(decimal_amount as u32) as f64;
-    let fixed_pointed_notation_amount = (amount * conversion_number) as u64;
+    let conversion_number = base_int.pow(decimal_amount as u32 - 2); //Convert fixed point cents to native token decimal amount
+    let fixed_pointed_notation_amount = amount * conversion_number;
 
     //Transfer fee to Post Owner Wallet
     token::transfer(cpi_ctx, fixed_pointed_notation_amount)?;
 
-    msg!("Successfully transferred ${:.2} as fee to: {}", amount, post_owner_address.key());
+    msg!("Successfully transferred ${:.2} as fee to: {}", (amount/100) as f32, post_owner_address.key());
 
     Ok(())
 }
@@ -462,7 +463,7 @@ pub mod chat
             accounts.signer.to_account_info(),
             accounts.token_program.to_account_info(),
             treasurer,
-            FEE_4CENTS * vote_amount.abs() as f64,
+            FEE_4CENTS * vote_amount.abs() as u64,
             accounts.fee_token_entry.decimal_amount
         )?;
 
@@ -3616,7 +3617,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
-                FEE_3CENTS * vote_amount as f64,
+                FEE_3CENTS * vote_amount as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
 
@@ -3627,7 +3628,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 canidate_address.key(),
-                FEE_1CENT * vote_amount as f64,
+                FEE_1CENT * vote_amount as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
         }
@@ -3643,7 +3644,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
-                FEE_4CENTS * vote_amount.abs() as f64,
+                FEE_4CENTS * vote_amount.abs() as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
         }
@@ -3763,7 +3764,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
-                FEE_3CENTS * vote_amount as f64,
+                FEE_3CENTS * vote_amount as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
 
@@ -3774,7 +3775,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 canidate_address.key(),
-                FEE_1CENT * vote_amount as f64,
+                FEE_1CENT * vote_amount as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
         }
@@ -3790,7 +3791,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
-                FEE_4CENTS * vote_amount.abs() as f64,
+                FEE_4CENTS * vote_amount.abs() as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
         }
@@ -3910,7 +3911,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
-                FEE_3CENTS * vote_amount as f64,
+                FEE_3CENTS * vote_amount as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
 
@@ -3921,7 +3922,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 canidate_address.key(),
-                FEE_1CENT * vote_amount as f64,
+                FEE_1CENT * vote_amount as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
         }
@@ -3937,7 +3938,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
-                FEE_4CENTS * vote_amount.abs() as f64,
+                FEE_4CENTS * vote_amount.abs() as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
         }
@@ -4057,7 +4058,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
-                FEE_3CENTS * vote_amount as f64,
+                FEE_3CENTS * vote_amount as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
 
@@ -4068,7 +4069,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 canidate_address.key(),
-                FEE_1CENT * vote_amount as f64,
+                FEE_1CENT * vote_amount as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
         }
@@ -4084,7 +4085,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
-                FEE_4CENTS * vote_amount.abs() as f64,
+                FEE_4CENTS * vote_amount.abs() as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
         }
@@ -4204,7 +4205,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
-                FEE_3CENTS * vote_amount as f64,
+                FEE_3CENTS * vote_amount as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
 
@@ -4215,7 +4216,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 canidate_address.key(),
-                FEE_1CENT * vote_amount as f64,
+                FEE_1CENT * vote_amount as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
         }
@@ -4231,7 +4232,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
-                FEE_4CENTS * vote_amount.abs() as f64,
+                FEE_4CENTS * vote_amount.abs() as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
         }
@@ -4351,7 +4352,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
-                FEE_3CENTS * vote_amount as f64,
+                FEE_3CENTS * vote_amount as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
 
@@ -4362,7 +4363,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 canidate_address.key(),
-                FEE_1CENT * vote_amount as f64,
+                FEE_1CENT * vote_amount as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
         }
@@ -4378,7 +4379,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
-                FEE_4CENTS * vote_amount.abs() as f64,
+                FEE_4CENTS * vote_amount.abs() as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
         }
@@ -4498,7 +4499,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
-                FEE_3CENTS * vote_amount as f64,
+                FEE_3CENTS * vote_amount as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
 
@@ -4509,7 +4510,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 canidate_address.key(),
-                FEE_1CENT * vote_amount as f64,
+                FEE_1CENT * vote_amount as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
         }
@@ -4525,7 +4526,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
-                FEE_4CENTS * vote_amount.abs() as f64,
+                FEE_4CENTS * vote_amount.abs() as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
         }
@@ -4645,7 +4646,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
-                FEE_3CENTS * vote_amount as f64,
+                FEE_3CENTS * vote_amount as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
 
@@ -4656,7 +4657,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 canidate_address.key(),
-                FEE_1CENT * vote_amount as f64,
+                FEE_1CENT * vote_amount as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
         }
@@ -4672,7 +4673,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
-                FEE_4CENTS * vote_amount.abs() as f64,
+                FEE_4CENTS * vote_amount.abs() as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
         }
@@ -4792,7 +4793,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
-                FEE_3CENTS * vote_amount as f64,
+                FEE_3CENTS * vote_amount as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
 
@@ -4803,7 +4804,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 canidate_address.key(),
-                FEE_1CENT * vote_amount as f64,
+                FEE_1CENT * vote_amount as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
         }
@@ -4819,7 +4820,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
-                FEE_4CENTS * vote_amount.abs() as f64,
+                FEE_4CENTS * vote_amount.abs() as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
         }
@@ -4939,7 +4940,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
-                FEE_3CENTS * vote_amount as f64,
+                FEE_3CENTS * vote_amount as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
 
@@ -4950,7 +4951,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 canidate_address.key(),
-                FEE_1CENT * vote_amount as f64,
+                FEE_1CENT * vote_amount as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
         }
@@ -4966,7 +4967,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
-                FEE_4CENTS * vote_amount.abs() as f64,
+                FEE_4CENTS * vote_amount.abs() as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
         }
@@ -5086,7 +5087,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
-                FEE_3CENTS * vote_amount as f64,
+                FEE_3CENTS * vote_amount as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
 
@@ -5097,7 +5098,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 canidate_address.key(),
-                FEE_1CENT * vote_amount as f64,
+                FEE_1CENT * vote_amount as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
         }
@@ -5113,7 +5114,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
-                FEE_4CENTS * vote_amount.abs() as f64,
+                FEE_4CENTS * vote_amount.abs() as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
         }
@@ -5233,7 +5234,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
-                FEE_3CENTS * vote_amount as f64,
+                FEE_3CENTS * vote_amount as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
 
@@ -5244,7 +5245,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 canidate_address.key(),
-                FEE_1CENT * vote_amount as f64,
+                FEE_1CENT * vote_amount as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
         }
@@ -5260,7 +5261,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
-                FEE_4CENTS * vote_amount.abs() as f64,
+                FEE_4CENTS * vote_amount.abs() as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
         }
@@ -5380,7 +5381,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
-                FEE_3CENTS * vote_amount as f64,
+                FEE_3CENTS * vote_amount as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
 
@@ -5391,7 +5392,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 canidate_address.key(),
-                FEE_1CENT * vote_amount as f64,
+                FEE_1CENT * vote_amount as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
         }
@@ -5407,7 +5408,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
-                FEE_4CENTS * vote_amount.abs() as f64,
+                FEE_4CENTS * vote_amount.abs() as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
         }
@@ -5527,7 +5528,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
-                FEE_3CENTS * vote_amount as f64,
+                FEE_3CENTS * vote_amount as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
 
@@ -5538,7 +5539,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 canidate_address.key(),
-                FEE_1CENT * vote_amount as f64,
+                FEE_1CENT * vote_amount as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
         }
@@ -5554,7 +5555,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
-                FEE_4CENTS * vote_amount.abs() as f64,
+                FEE_4CENTS * vote_amount.abs() as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
         }
@@ -5674,7 +5675,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
-                FEE_3CENTS * vote_amount as f64,
+                FEE_3CENTS * vote_amount as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
 
@@ -5685,7 +5686,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 canidate_address.key(),
-                FEE_1CENT * vote_amount as f64,
+                FEE_1CENT * vote_amount as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
         }
@@ -5701,7 +5702,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
-                FEE_4CENTS * vote_amount.abs() as f64,
+                FEE_4CENTS * vote_amount.abs() as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
         }
@@ -5821,7 +5822,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
-                FEE_3CENTS * vote_amount as f64,
+                FEE_3CENTS * vote_amount as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
 
@@ -5832,7 +5833,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 canidate_address.key(),
-                FEE_1CENT * vote_amount as f64,
+                FEE_1CENT * vote_amount as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
         }
@@ -5848,7 +5849,7 @@ pub mod chat
                 accounts.signer.to_account_info(),
                 accounts.token_program.to_account_info(),
                 treasurer,
-                FEE_4CENTS * vote_amount.abs() as f64,
+                FEE_4CENTS * vote_amount.abs() as u64,
                 accounts.fee_token_entry.decimal_amount
             )?;
         }
@@ -8797,7 +8798,7 @@ pub mod chat
             accounts.signer.to_account_info(),
             accounts.token_program.to_account_info(),
             treasurer,
-            FEE_4CENTS * vote_amount.abs() as f64,
+            FEE_4CENTS * vote_amount.abs() as u64,
             accounts.fee_token_entry.decimal_amount
         )?;
 
